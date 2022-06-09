@@ -1,0 +1,61 @@
+profile: full
+ceip_policy_disclosed: true # Installation fails if this is set to 'false'
+buildservice:
+  kp_default_repository: "INSTALL_REGISTRY_HOSTNAME/tanzu-application-platform/build-service"
+  kp_default_repository_username: "INSTALL_REGISTRY_USERNAME"
+  kp_default_repository_password: "INSTALL_REGISTRY_PASSWORD"
+  tanzunet_username: "TANZUNET-USERNAME"
+  tanzunet_password: "TANZUNET-PASSWORD"
+  descriptor_name: "full"
+  enable_automatic_dependency_updates: true
+supply_chain: basic
+
+ootb_supply_chain_basic:
+  registry:
+    server: "INSTALL_REGISTRY_HOSTNAME"
+    repository: "tanzu-application-platform/supply-chain"
+  gitops:
+    ssh_secret: ""
+
+learningcenter:
+  ingressDomain: "INGRESS-DOMAIN"
+
+tap_gui:
+  service_type: ClusterIP
+  ingressEnabled: "true"
+  ingressDomain: "INGRESS-DOMAIN"
+  app_config:
+    app:
+      baseUrl: http://tap-gui.INGRESS-DOMAIN
+    catalog:
+      locations:
+        - type: url
+          target: https://GIT-CATALOG-URL/catalog-info.yaml
+    backend:
+      baseUrl: http://tap-gui.INGRESS-DOMAIN
+      cors:
+        origin: http://tap-gui.INGRESS-DOMAIN
+
+metadata_store:
+  app_service_type: ClusterIP # (optional) Defaults to LoadBalancer. Change to NodePort for distributions that don't support LoadBalancer
+
+grype:
+  namespace: "default" # (optional) Defaults to default namespace.
+  targetImagePullSecret: "registry-credentials"
+
+cnrs:
+  domain_name: INGRESS-DOMAIN
+  ingress:
+    reuse_crds: true
+    external:
+      namespace: tanzu-system-ingress
+  local_dns:
+    domain: example.com
+
+contour:
+  infrastructure_provider: aws
+  envoy:
+    service:
+      aws:
+        LBType: nlb
+ 
